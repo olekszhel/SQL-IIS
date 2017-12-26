@@ -44,7 +44,6 @@ if ( $osversion -ge "10.0" ) {
 		So temporarily change IIS version in the registry."
 
 	$registryPath = 'hklm:Software\Microsoft\InetStp'
-Write-Host $registryPath
 	$Name = "MajorVersion"
 	$currentValue = (Get-ItemProperty "hklm:Software\Microsoft\InetStp").MajorVersion
 	$newvalue = "7"
@@ -54,6 +53,7 @@ Write-Host $registryPath
 Write-Host "Running rewrite module Install..."
 Write-Host
 msiexec /package $output /passive /promptrestart
+Start-Sleep -s 10
 
 if ( $osversion -ge "10.0" ) {
 	Write-Host "[!] Reset IIS version in the registry"
