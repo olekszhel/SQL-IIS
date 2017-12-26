@@ -113,11 +113,7 @@ else
    Write-Host "SQL Server is not installed"
    Write-Host
    # Run the installer using the ini file
-<<<<<<< HEAD
-   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SAPWD=P2ssw0rd"
-=======
-   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SQLSYSADMINACCOUNTS=$domAccount /SQLSVCPASSWORD=P2ssw0rd /SAPWD=P2ssw0rd"
->>>>>>> issue5
+   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SQLSYSADMINACCOUNTS=$domAccount /SAPWD=P2ssw0rd"
    Write-Host "Running SQL Install - check %programfiles%\Microsoft SQL Server\120\Setup Bootstrap\Log\ for logs..."
    Write-Host
    Invoke-Expression $cmd | Write-Host
