@@ -57,7 +57,6 @@ Write-Host $registryPath
 Write-Host "Running rewrite module Install..."
 Write-Host
 msiexec /package $output /passive
-write-host $output
 
 if ( $osversion -ge "10.0" ) {
 	Write-Host "[!] Reset IIS version in the registry"
