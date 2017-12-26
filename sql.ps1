@@ -122,7 +122,7 @@ else
 $sqlInstances = gwmi win32_service -computerName localhost | ? { $_.Name -match "mssql" -and $_.PathName -match "sqlservr.exe" } | % { $_.Name }
 $res = $sqlInstances -ne $null -and $sqlInstances -gt 0
 if ($res) {
-   return
+   break
    }
 else
 {
