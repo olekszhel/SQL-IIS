@@ -1,7 +1,12 @@
 param
 (
    [String]
-   $WinSources='d:\windows\sxs'
+   $WinSources='d:\windows\sxs',
+
+   [Parameter(Mandatory=$true)]
+   [ValidateNotNullOrEmpty()]
+   [String]
+   $domAccount
 )
 
 Write-Host
@@ -108,7 +113,7 @@ else
    Write-Host "SQL Server is not installed"
    Write-Host
    # Run the installer using the ini file
-   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SQLSVCPASSWORD=P2ssw0rd /SAPWD=P2ssw0rd"
+   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /ADDCURRENTUSERASSQLADMIN=$domAccount /SQLSVCPASSWORD=P2ssw0rd /SAPWD=P2ssw0rd"
    Write-Host "Running SQL Install - check %programfiles%\Microsoft SQL Server\120\Setup Bootstrap\Log\ for logs..."
    Write-Host
    Invoke-Expression $cmd | Write-Host
