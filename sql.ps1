@@ -3,14 +3,13 @@ param
    [String]
    $WinSources='d:\windows\sxs',
 
-   [Parameter(Mandatory=$true)]
-   [ValidateNotNullOrEmpty()]
    [String]
-   $domAccount
+   $domAccount='.\administrator'
 )
 
 Write-Host
 Write-Host "Please type: sql.ps1 -WinSources <path-to-src> to change source directory"
+Write-Host "             sql.ps1 -domAccount <domain\user> to add AD admin. Default admin will be deploying user."
 Write-Host
 
 $url = "https://dl.dropboxusercontent.com/s/r8bk89s3tc40lbd/SQLServer2016SP1-FullSlipstream-x64-ENU.iso?dl=0"
