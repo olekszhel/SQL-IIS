@@ -119,7 +119,16 @@ else
    Invoke-Expression $cmd | Write-Host
 }
 
-
+$sqlInstances = gwmi win32_service -computerName localhost | ? { $_.Name -match "mssql" -and $_.PathName -match "sqlservr.exe" } | % { $_.Name }
+$res = $sqlInstances -ne $null -and $sqlInstances -gt 0
+if ($res) {
+   return
+   }
+else
+{
+   throw "ERROR: Please check MSSQL installation logs!"
+ }
+ 
 # Run the SMSS installer
 
 $cmd = "$output_smss /install /passive /norestart"
