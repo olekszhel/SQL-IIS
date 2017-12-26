@@ -1,6 +1,5 @@
 $url = "https://dl.dropboxusercontent.com/s/ghx21onr3tcmyse/rewrite_2.0_rtw_x64.msi?dl=0"
 $url_wd = "https://dl.dropboxusercontent.com/s/k7nzicd9s536720/WebDeploy_amd64_en-US.msi?dl=0"
-
 $path = "c:\temp"
 $output = "c:\temp\rewrite_2.0_rtw_x64.msi"
 $output_wd = "c:\temp\WebDeploy_amd64_en-US.msi"
@@ -30,16 +29,14 @@ If(!(test-path $output_wd))
 }
 
 ## Install IIS
-# $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SQLSVCPASSWORD=P2ssw0rd /SAPWD=P2ssw0rd"
 Write-Host "Running IIS Install..."
 Write-Host
 #Invoke-Expression $cmd | Write-Host
 Install-WindowsFeature -name Web-Server
 Write-Host
 
-## Install rewrite module
-
 # Install URL Rewrite module in Windows Server 2016 for IIS
+$osversion=[environment]::OSVersion.Version.Major
 
 if ( $osversion -ge "10.0" ) {
 	Write-Host "[!] urlrewrite.msi checks the Windows Server IIS version `
@@ -56,7 +53,7 @@ Write-Host $registryPath
 
 Write-Host "Running rewrite module Install..."
 Write-Host
-msiexec /package $output /passive
+msiexec /package $output /passive /promptrestart
 
 if ( $osversion -ge "10.0" ) {
 	Write-Host "[!] Reset IIS version in the registry"
@@ -69,4 +66,4 @@ if ( $osversion -ge "10.0" ) {
 ## Install Web Deploy module
 Write-Host "Running Web Deploy module Install..."
 Write-Host
-msiexec /package $output_wd /passive
+msiexec /package $output_wd /passive /promptrestart
