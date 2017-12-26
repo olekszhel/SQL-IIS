@@ -1,7 +1,12 @@
 param
 (
    [String]
-   $WinSources='d:\windows\sxs'
+   $WinSources='d:\windows\sxs',
+
+   [Parameter(Mandatory=$true)]
+   [ValidateNotNullOrEmpty()]
+   [String]
+   $domAccount
 )
 
 Write-Host
@@ -108,18 +113,27 @@ else
    Write-Host "SQL Server is not installed"
    Write-Host
    # Run the installer using the ini file
+<<<<<<< HEAD
    $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SAPWD=P2ssw0rd"
+=======
+   $cmd = "$setupDriveLetter\Setup.exe /ConfigurationFile=c:\temp\ConfigurationFile.ini /SQLSYSADMINACCOUNTS=$domAccount /SQLSVCPASSWORD=P2ssw0rd /SAPWD=P2ssw0rd"
+>>>>>>> issue5
    Write-Host "Running SQL Install - check %programfiles%\Microsoft SQL Server\120\Setup Bootstrap\Log\ for logs..."
    Write-Host
    Invoke-Expression $cmd | Write-Host
 }
 
-
-# Run the SMSS installer
-
-$cmd = "$output_smss /install /passive /norestart"
-
-Write-Host "Running SMSS Install..."
-Write-Host
-Invoke-Expression $cmd | Write-Host
-Write-Host "Use sa P2ssw0rd to access MSSQL"
+$sqlInstances = gwmi win32_service -computerName localhost | ? { $_.Name -match "mssql" -and $_.PathName -match "sqlservr.exe" } | % { $_.Name }
+$res = $sqlInstances -ne $null -and $sqlInstances -gt 0
+if ($res) {
+   # Run the SMSS installer
+   $cmd = "$output_smss /install /passive /norestart"
+   Write-Host "Running SMSS Install..."
+   Write-Host
+   Invoke-Expression $cmd | Write-Host
+   Write-Host "Use sa P2ssw0rd to access MSSQL"
+   }
+else
+{
+   throw "ERROR: Please check MSSQL installation logs!"
+ }
