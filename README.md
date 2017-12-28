@@ -17,4 +17,5 @@ sql.ps1 -domAccount <domain\user> to add AD admin to MSSQL instance. By default 
 - Install IIS
 -- Install Web Depoly
 -- Install URL Rewrite
+-- Create zip and deploy with msdeploy
 
