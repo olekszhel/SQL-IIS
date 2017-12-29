@@ -31,8 +31,9 @@ If(!(test-path $output_wd))
 ## Install IIS
 Write-Host "Running IIS Install..."
 Write-Host
-#Invoke-Expression $cmd | Write-Host
 Install-WindowsFeature -name Web-Server
+Install-WindowsFeature -name Web-Mgmt-Console
+Install-WindowsFeature -name Web-Mgmt-Service
 Write-Host
 
 # Install URL Rewrite module in Windows Server 2016 for IIS
@@ -66,4 +67,4 @@ if ( $osversion -ge "10.0" ) {
 ## Install Web Deploy module
 Write-Host "Running Web Deploy module Install..."
 Write-Host
-msiexec /package $output_wd /passive /promptrestart
+msiexec /package $output_wd ADDLOCAL=ALL /passive /promptrestart
