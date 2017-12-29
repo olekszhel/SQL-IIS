@@ -19,3 +19,6 @@ sql.ps1 -domAccount <domain\user> to add AD admin to MSSQL instance. By default 
 -- Install URL Rewrite
 -- Create zip and deploy with msdeploy
 
+USAGE:
+Site name to deploy in is "my-test-app.test"
+

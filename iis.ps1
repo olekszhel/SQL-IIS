@@ -1,6 +1,7 @@
 $url = "https://dl.dropboxusercontent.com/s/ghx21onr3tcmyse/rewrite_2.0_rtw_x64.msi?dl=0"
 $url_wd = "https://dl.dropboxusercontent.com/s/k7nzicd9s536720/WebDeploy_amd64_en-US.msi?dl=0"
 $path = "c:\temp"
+$directoryPath = "c:\inetpub\SomeFolder"
 $output = "c:\temp\rewrite_2.0_rtw_x64.msi"
 $output_wd = "c:\temp\WebDeploy_amd64_en-US.msi"
 
@@ -68,3 +69,40 @@ if ( $osversion -ge "10.0" ) {
 Write-Host "Running Web Deploy module Install..."
 Write-Host
 msiexec /package $output_wd ADDLOCAL=ALL /passive /promptrestart
+
+##Install site to deploy in
+
+If(!(test-path $directoryPath))
+{
+   New-Item -ItemType Directory -Force -Path $directoryPath
+   Write-Host
+}
+
+Import-Module WebAdministration
+$iisAppPoolName = "my-test-app"
+$iisAppPoolDotNetVersion = "v4.0"
+$iisAppName = "my-test-app.test"
+
+#navigate to the app pools root
+cd IIS:\AppPools\
+
+#check if the app pool exists
+if (!(Test-Path $iisAppPoolName -pathType container))
+{
+    #create the app pool
+    $appPool = New-Item $iisAppPoolName
+    $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
+}
+
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (Test-Path $iisAppName -pathType container)
+{
+    return
+}
+
+#create the site
+$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisAppName} -physicalPath $directoryPath
+$iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
